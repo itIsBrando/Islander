@@ -21,9 +21,6 @@
 #define TILE_ICON_DOWN  34
 #define TILE_ARROW      35
 
-#define TILE_ICON_YOU   40 // 40-41
-#define TILE_ICON_CPU   42 // 42-43
-
 typedef uint8_t u8;
 
 
@@ -83,15 +80,12 @@ typedef struct {
 
 
 typedef struct {
-    uint8_t x, y;
+    uint8_t x;      // absolute tile (x, y). On the interval [0-72]
+    uint8_t id;     // sprite index
+    uint8_t y;      // absolute tile (x, y). On the interval [0-72]
     inv_t inventory;
+    uint8_t active_item; // index in `inventory` of the active item
     direction_t dir;
 } player_t;
-
-
-typedef struct {
-    uint8_t x, y;
-} position_t;
-
 
 #endif

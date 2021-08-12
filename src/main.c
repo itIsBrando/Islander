@@ -8,9 +8,10 @@
 
 #include "structs.h"
 #include "main.h"
+#include "oam.h"
+#include "entity/player.h"
 #include "world/chunk.h"
 #include "world/spawn.h"
-#include "oam.h"
 
 
 void main(void) {
@@ -20,8 +21,8 @@ void main(void) {
 
     OBP1_REG = 0b10110100; // set other sprite palette
     OBP0_REG = 0b10110100; // set other sprite palette
-    set_sprite_data(1, 250, SPRITE_DATA);
-    set_bkg_data(1, 250, SPRITE_DATA);
+    set_sprite_data(1, 128, SPRITE_DATA);
+    set_bkg_data(1, 128, SPRITE_DATA);
 
     STAT_REG = 0;
     SHOW_BKG; SHOW_SPRITES;
@@ -40,59 +41,32 @@ void main(void) {
  * Starts the game
  */
 void initGame() {
-    // player_t player;
-    uint8_t x = 0, y = 0;
-
-    move_win(0, 144);
+    move_win(7, 136);
     move_bkg(0, 0);
 
     print("Generating world", 0, 0);
     
-    for(y = 0; y < 3; y++)
+    for(u8 y = 0; y < 3; y++)
     {
-        for( x = 0; x < 3; x++)
+        for(u8 x = 0; x < 3; x++)
             cnk_island_load(0, x, y);
-
     }
 
     cnk_init();
-    cnk_draw_active();
+    plr_init();
 
-    x = 0, y = 1;
+    cnk_draw_active();
 
     do {
         uint8_t j = joypad();
-        
-        if(j & J_UP)
-        {
 
-            if((y & 63) == 0)
-                cnk_load_row(DIRECTION_UP);
-                    // y--;
-            // else
-                y--;
-        }
-
-        if(j & J_DOWN)
-        {
-            if((y & 63) == 0)
-                cnk_load_row(DIRECTION_DOWN);
-
-            y++;
-        }
-
-        if(j & J_LEFT)
-            x--;
-        
-        if(j & J_RIGHT)
-            x++;
+        plr_update(j);
 
         if(j & J_A) {
             spwn_do_tick();
             waitjoypad(J_A);
         }
 
-        move_bkg(x, y);
         wait_vbl_done();
     } while(true);
 }
@@ -223,8 +197,8 @@ void clear_bg() {
 }
 
 
-static int8_t dx[] = {-1, 1, 0, 0};
-static int8_t dy[] = {0, 0, -1, 1};
+static const int8_t dx[] = {-1, 1, 0, 0};
+static const int8_t dy[] = {0, 0, -1, 1};
 
 
 inline int8_t dir_get_x(const direction_t dir)

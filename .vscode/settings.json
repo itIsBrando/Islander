@@ -2,7 +2,8 @@
     "files.associations": {
         "structs.h": "c",
         "defines.h": "c",
-        "chunk.h": "c"
+        "chunk.h": "c",
+        "player.h": "c"
     },
     "C_Cpp.default.includePath": ["/opt/gbdk/include"]
 }

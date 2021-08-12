@@ -129,7 +129,7 @@ void cnk_init()
     }
 
     cnk_xMin = 3, cnk_xMax = 6;
-    cnk_yMin = 3, cnk_yMax = 6;
+    cnk_yMin = 2, cnk_yMax = 6;
 }
 
 
@@ -143,19 +143,31 @@ bool cnk_load_row(const direction_t dir)
         return false;
 
     active_chunk_t *ac = active_chunks;
-    u8 matches = 0;
+    const int8_t dx = dir_get_x(dir);
+    const int8_t dy = dir_get_y(dir);
 
     for(uint8_t i = 0; i < 16; i++)
     {
-        if((dir == DIRECTION_UP && ac->yChunk == cnk_yMin) || (dir == DIRECTION_DOWN && ac->yChunk == cnk_yMax))
-        {
-            u8 yChunk = ac->yChunk;
-            ac->yChunk += dir_get_y(dir);
+        if(
+            (dir == DIRECTION_UP && ac->yChunk == cnk_yMax) ||
+            (dir == DIRECTION_DOWN && ac->yChunk == cnk_yMin) ||
+            (dir == DIRECTION_LEFT && ac->xChunk == cnk_xMax) ||
+            (dir == DIRECTION_RIGHT && ac->xChunk == cnk_xMin)
+        ) {
+            if(dir == DIRECTION_LEFT)
+                ac->xChunk = cnk_xMin + dx;
+            else if(dir == DIRECTION_RIGHT)
+                ac->xChunk = cnk_xMax + dx;
+            else if(dir == DIRECTION_UP)
+                ac->yChunk = cnk_yMin + dy;
+            else if(dir == DIRECTION_DOWN)
+                ac->yChunk = cnk_yMax + dy;
 
             //   unload chunk
-            // cnk_unload(&active_chunks[i]);
-            ac->yOffset = (ac->yOffset + dir_get_y(dir)) & 3;
-            ac->chunk = &world.chunks[ac->xChunk + (ac->yChunk + dir_get_y(dir)) * 9];
+            // cnk_unload(ac);
+            // ac->xOffset = (ac->xChunk - 3) & 3;//(ac->xOffset + dx) & 3;
+            // ac->yOffset = (ac->yChunk - 3) & 3;//(ac->yOffset + dy) & 3;
+            ac->chunk = &world.chunks[ac->xChunk + (ac->yChunk) * 9];
             
             cnk_draw(
                 ac->xOffset << 3,
@@ -168,16 +180,12 @@ bool cnk_load_row(const direction_t dir)
         ac++;
     }
 
+    cnk_yMax += dy;
+    cnk_yMin += dy;
 
-    if(dir == DIRECTION_UP)
-    {
-        cnk_yMax--;
-        cnk_yMin--;
-    } else {
-        cnk_yMax++;
-        cnk_yMin++;
-    }
-
+    cnk_xMax += dx;
+    cnk_xMin += dx;
+    
     return true;
 }
 
