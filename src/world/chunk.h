@@ -14,5 +14,6 @@ bool cnk_load_row(const direction_t dir);
 
 
 void cnk_active_write(u8 x, u8 y, u8 tile);
+active_chunk_t *cnk_get_relative(u8 tx, u8 ty);
 
 #endif

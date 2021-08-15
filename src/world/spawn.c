@@ -1,21 +1,12 @@
 
 #include "spawn.h"
 #include "chunk.h"
+#include "collision.h"
 
 // #include <stdlib.h>
 #include <rand.h>
 
 #define PERCENT * 255/100
-
-typedef enum {
-    TILE_TYPE_ROCK=50,
-    TILE_TYPE_TREE=64,
-    TILE_TYPE_COAL=28,
-    TILE_TYPE_IRON,
-    TILE_TYPE_GOLD,
-    TILE_TYPE_DIAMOND,
-} tile_t;
-
 
 typedef struct {
     u8 tile;
@@ -29,15 +20,18 @@ typedef struct {
 bool spwn_do_tick()
 {
     const spawn_rate_t spawnables[] = {
-        {TILE_TYPE_ROCK, 50 PERCENT},
-        {TILE_TYPE_TREE, 25 PERCENT},
-        {TILE_TYPE_COAL, 25 PERCENT}
+        {TILE_TREE_TOP, 50 PERCENT},
+        {TILE_STONE, 25 PERCENT},
+        {TILE_COAL, 25 PERCENT}
     };
 
 
     const u8 candidates = sizeof(spawnables) / sizeof(spawnables[0]);
 
     u8 x = rand() & 31, y = rand() & 31;
+
+    if(cnk_get_relative(x, y)->chunk->tiles[(x & 7) + ((y & 7) << 3)] != TILE_GROUND)
+        return false;
 
     u8 spawn_type = rand();
 
@@ -54,6 +48,8 @@ bool spwn_do_tick()
     }
 
     cnk_active_write(x, y, spawnables[i].tile);
+    if(spawnables[i].tile == TILE_TREE_TOP)
+        cnk_active_write(x, y + 1, TILE_TREE_BOTTOM);
 
     return true;
 }

@@ -14,18 +14,13 @@ world_t world;
  * Each chunk is 8x8 tiles
  */
 
-typedef struct {
-    chunk_t *chunk;
-    u8 xChunk, yChunk; // [0-9) represents the chunk's position relative to the ENTIRE world
-    u8 xOffset, yOffset;  // screen offset to draw chunks
-} active_chunk_t;
 
 active_chunk_t active_chunks[16];
 
 
 inline void cnk_draw(const u8 x, const u8 y, const chunk_t *chunk)
 {
-    set_bkg_tiles(x & 0b11000, y & 0b11000, 8, 8, chunk->tiles);
+    set_bkg_tiles((x & 3) << 3, (y & 3) << 3, 8, 8, chunk->tiles);
 }
 
 
@@ -60,11 +55,11 @@ const stored_island_t islands[] = {
  */
 void cnk_active_write(u8 x, u8 y, u8 tile)
 {
-    active_chunk_t *c = &active_chunks[(x >> 3) + (y >> 3) * 4];
+    active_chunk_t *c = cnk_get_relative(x, y);
 
     c->chunk->tiles[(x & 7) + (y & 7) * 8] = tile;
 
-    cnk_draw(c->xOffset << 3, c->yOffset << 3, c->chunk);
+    cnk_draw(c->xOffset, c->yOffset, c->chunk);
 }
 
 
@@ -88,7 +83,7 @@ void cnk_island_load(const uint8_t islandNumber, u8 xx, u8 yy)
         
         for(u8 x = 0; x < 24; x++)
         {
-            world.chunks[xChunk + yChunk * 9].tiles[(x & 7) + ((y & 7) << 3)] = (tile & 0x80) ? 22 : 0;
+            world.chunks[xChunk + yChunk * 9].tiles[(x & 7) + ((y & 7) << 3)] = (tile & 0x80) ? TILE_GROUND : TILE_WATER;
 
             tile <<= 1;
 
@@ -129,7 +124,7 @@ void cnk_init()
     }
 
     cnk_xMin = 3, cnk_xMax = 6;
-    cnk_yMin = 2, cnk_yMax = 6;
+    cnk_yMin = 3, cnk_yMax = 6;
 }
 
 
@@ -155,13 +150,13 @@ bool cnk_load_row(const direction_t dir)
             (dir == DIRECTION_RIGHT && ac->xChunk == cnk_xMin)
         ) {
             if(dir == DIRECTION_LEFT)
-                ac->xChunk = cnk_xMin + dx;
+                ac->xChunk = cnk_xMin - 1;
             else if(dir == DIRECTION_RIGHT)
-                ac->xChunk = cnk_xMax + dx;
+                ac->xChunk = cnk_xMax + 1;
             else if(dir == DIRECTION_UP)
-                ac->yChunk = cnk_yMin + dy;
+                ac->yChunk = cnk_yMin - 1;
             else if(dir == DIRECTION_DOWN)
-                ac->yChunk = cnk_yMax + dy;
+                ac->yChunk = cnk_yMax + 1;
 
             //   unload chunk
             // cnk_unload(ac);
@@ -170,8 +165,8 @@ bool cnk_load_row(const direction_t dir)
             ac->chunk = &world.chunks[ac->xChunk + (ac->yChunk) * 9];
             
             cnk_draw(
-                ac->xOffset << 3,
-                ac->yOffset << 3,
+                ac->xOffset,
+                ac->yOffset,
                 ac->chunk
             );
 
@@ -201,8 +196,35 @@ void cnk_draw_active()
     for(u8 i = 0; i < 16; i++)
     {
         if(c->chunk)
-            cnk_draw(c->xOffset << 3, c->yOffset << 3, c->chunk);
+            cnk_draw(c->xOffset, c->yOffset, c->chunk);
         
         c++;
     }
+}
+
+
+/**
+ * Returns an active chunk given a tile coordinate
+ * @param tx x coordinate between 0 and 31
+ * @param ty y coordinate between 0 and 31
+ * @returns chunk at (tx, ty)
+ */
+active_chunk_t *cnk_get_relative(u8 tx, u8 ty)
+{
+    tx >>= 3;
+    ty >>= 3;
+
+    active_chunk_t *ac = active_chunks;
+
+    for(u8 i = 0; i < 16; i++) {
+        
+        if(ac->xOffset == tx && ac->yOffset == ty)
+        {
+            return ac;
+        }
+
+        ac++;
+    }
+
+    return NULL;
 }

@@ -14,18 +14,23 @@
 #include "world/spawn.h"
 
 
+void vbl_main_loop();
+uint8_t main_counter = 0;
+
+
+
 void main(void) {
 
     // load the font
     set_bkg_1bit_data(0x80, 102, font_ibm + 130, 3);
 
-    OBP1_REG = 0b10110100; // set other sprite palette
-    OBP0_REG = 0b10110100; // set other sprite palette
-    set_sprite_data(1, 128, SPRITE_DATA);
-    set_bkg_data(1, 128, SPRITE_DATA);
+    // OBP0_REG = 0b10110100; // set other sprite palette
+    set_sprite_data(0, 128, SPRITE_DATA);
+    set_bkg_data(0, 128, SPRITE_DATA);
 
     STAT_REG = 0;
     SHOW_BKG; SHOW_SPRITES;
+    OBP1_REG = 0b10110000; // set other sprite palette
 
     // set vblank interrupt
     set_interrupts(VBL_IFLAG);
@@ -41,7 +46,6 @@ void main(void) {
  * Starts the game
  */
 void initGame() {
-    move_win(7, 136);
     move_bkg(0, 0);
 
     print("Generating world", 0, 0);
@@ -57,20 +61,59 @@ void initGame() {
 
     cnk_draw_active();
 
+    add_VBL(vbl_main_loop);
+
     do {
         uint8_t j = joypad();
 
         plr_update(j);
-
-        if(j & J_A) {
-            spwn_do_tick();
-            waitjoypad(J_A);
-        }
-
+    
         wait_vbl_done();
     } while(true);
 }
 
+
+int8_t shake_x = 0;
+
+/**
+ * Default interrupt handler
+ */
+void vbl_main_loop() {
+    if(main_counter++ == 0)
+        spwn_do_tick();
+
+    if(shake_x) {
+        int8_t off;
+        if(shake_x < 0) {
+            off = -1;
+            shake_x++;
+        } else {
+            off = 1;
+            shake_x--;
+        }
+
+        int8_t xOff = shake_x * 2 + off;
+        SCX_REG += xOff;
+        move_sprite(player.id, PLR_SCRN_X + shake_x, PLR_SCRN_Y);
+        
+        shake_x = -shake_x;
+    }
+}
+
+
+/**
+ * Screen shake
+ * @param instensity value > 0
+ */
+inline void shake(uint8_t intensity)
+{
+    if(shake_x == 0)
+    {
+        shake_x = intensity;    
+        SCX_REG -= intensity;
+        move_sprite(player.id, PLR_SCRN_X - intensity, PLR_SCRN_Y);
+    }
+}
 
 /**
  * Better alternative of `waitpad`. Power efficient. Waits until button(s) is/are released

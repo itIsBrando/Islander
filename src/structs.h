@@ -6,12 +6,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define TILE_TREE   04
-#define TILE_BRIDGE 14
-#define TILE_WATER  15
-#define TILE_HOUSE  16
-#define TILE_FOG    23
-
 #define TILE_ICON_START 26 // 26-28
 #define TILE_ICON_A     29
 #define TILE_ICON_B     30
@@ -23,6 +17,19 @@
 
 typedef uint8_t u8;
 
+
+#define BIT(b) (1 << b)
+
+typedef enum {
+    TILE_WATER = 0,
+    TILE_PLAYER_BASE = 1,
+    TILE_GROUND = 21,
+    TILE_COAL = 27,
+    TILE_STONE = 32,
+    TILE_TREE_TOP = 47,
+    TILE_TREE_BOTTOM = 63,
+    TILE_BRIDGE = 35,
+} tile_t;
 
 typedef enum {
     DIRECTION_LEFT,
@@ -39,11 +46,17 @@ typedef struct {
 
 
 typedef struct {
-    uint8_t tiles[8*8];
+    tile_t tiles[8 * 8];
     uint8_t entSize;
     ent_t entities[CHUNK_MAX_ENTITIES];
 } chunk_t;
 
+
+typedef struct {
+    chunk_t *chunk;
+    u8 xChunk, yChunk; // [0-9) represents the chunk's position relative to the ENTIRE world
+    u8 xOffset, yOffset;  // screen offset to draw chunks
+} active_chunk_t;
 
 /**
  * Stores a 3x3 array of chunks representing one island
@@ -68,6 +81,16 @@ typedef struct {
 
 
 typedef struct {
+    const char *name;
+    const bool placable : 1;
+    const bool is_tool : 1;
+    tile_t tile;
+    uint8_t level;
+    
+} item_data_t;
+
+
+typedef struct {
     uint8_t id;
     uint8_t count;
 } item_t;
@@ -81,11 +104,14 @@ typedef struct {
 
 typedef struct {
     uint8_t x;      // absolute tile (x, y). On the interval [0-72]
-    uint8_t id;     // sprite index
     uint8_t y;      // absolute tile (x, y). On the interval [0-72]
+    uint8_t id;     // sprite index
     inv_t inventory;
     uint8_t active_item; // index in `inventory` of the active item
     direction_t dir;
 } player_t;
+
+
+extern player_t player;
 
 #endif
