@@ -9,5 +9,6 @@
 void plr_init();
 void plr_update(const uint8_t);
 void plr_move(const direction_t dir);
+void plr_interact();
 
 #endif

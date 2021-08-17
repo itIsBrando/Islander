@@ -6,16 +6,15 @@
 #include "../item/item.h"
 
 
-static uint8_t hud_cur = 0;
+uint8_t hud_cur = 0;
 
+static uint8_t hud_cur_id;
 
-uint8_t hud_cur_id;
-
-// @todo draw sprite of the player's active item
-uint8_t hud_item_id;
+// These are sprite ids corresponding to each of the player's inventory slots
+static uint8_t hud_item_ids[10];
 
 /**
- * Draws the player's units onto the window
+ * Draws the player's inventory onto the window
  */
 void hud_draw_hotbar(player_t *plr)
 {
@@ -32,7 +31,7 @@ void hud_draw_hotbar(player_t *plr)
 
     // draws the inventory
     for(i = 0; i < plr->inventory.size; i++) {
-        itm_draw_icon(&plr->inventory.items[i], 3 + (i << 4), 10);
+        hud_item_ids[i] = itm_draw_icon(&plr->inventory.items[i], 3 + (i << 4), 10);
     }
 
     SHOW_WIN;
@@ -48,12 +47,35 @@ void hud_draw_hotbar(player_t *plr)
  */
 void hud_move_cur(const direction_t dir)
 {
-    const int8_t dx = dir_get_x(dir);
+    if(dir == DIRECTION_LEFT)
+    {
+        if(hud_cur == 0)
+            return;
+        
+        hud_cur--;
+    } else {
+        if(hud_cur > player.inventory.size)
+            return;
 
-    if((hud_cur + dx) >= 10)
-        return;
-
-    hud_cur += dx;
-
+        hud_cur++;
+    }
+    
     move_sprite(hud_cur_id, 10 + (hud_cur << 4), 150);
+}
+
+
+/**
+ * @param id id of item removed. (not really necessary)
+ */
+void hud_remove_item()
+{
+    const u8 index = player.inventory.size;
+    const u8 id = hud_item_ids[index];
+
+    move_sprite(id, 0, 0);
+
+    if(hud_cur == index)
+        hud_move_cur(DIRECTION_LEFT);
+
+    spr_free(id);
 }

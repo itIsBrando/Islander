@@ -1,20 +1,21 @@
 
 
 #include "tile.h"
+#include "../item/item.h"
 
-
-#define DEFINE_TILE(_id, _can_pass, _can_mine, _hp) {\
+#define DEFINE_TILE(_id, _can_pass, _can_mine, _hp, ...) {\
 .id=_id,\
 .passable=_can_pass,\
 .mineable=_can_mine,\
-.hp=_hp\
+.hp=_hp,\
+__VA_ARGS__\
 }
 
 
 const tile_data_t tile_data[] = {
     DEFINE_TILE(TILE_WATER, false, false, 0),
-    DEFINE_TILE(TILE_TREE_TOP, false, true, 10),
-    DEFINE_TILE(TILE_TREE_BOTTOM, false, true, 10),
+    DEFINE_TILE(TILE_TREE_TOP, false, true, 10, .item_id=ITEM_WOOD),
+    DEFINE_TILE(TILE_TREE_BOTTOM, false, true, 10, .item_id=ITEM_WOOD),
     DEFINE_TILE(TILE_STONE, false, true, 10),
     DEFINE_TILE(TILE_COAL, false, true, 13),
 };

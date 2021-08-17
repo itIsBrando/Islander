@@ -9,6 +9,7 @@ typedef struct {
     bool mineable : 1; // true if this tile can be mined with a pickaxe
     uint8_t hp; // strength of items
     tile_t id;
+    uint8_t item_id; // id of item to drop when mined
 } tile_data_t;
 
 

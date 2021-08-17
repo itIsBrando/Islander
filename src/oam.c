@@ -33,6 +33,7 @@ uint8_t spr_allocate() {
 /**
  * Frees a sprite that is allocated from spr_allocate()
  * - no effect if the sprite is already freed
+ * - does not visually clear sprite
  */
 inline void spr_free(uint8_t i) {
     spr_candidates[i] = false;

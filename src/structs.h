@@ -82,7 +82,7 @@ typedef struct {
 
 typedef struct {
     const char *name;
-    const bool placable : 1;
+    const bool (*placable)(tile_t);
     const bool is_tool : 1;
     tile_t tile;
     uint8_t level;
@@ -92,7 +92,7 @@ typedef struct {
 
 typedef struct {
     uint8_t id;
-    uint8_t count;
+    int8_t count;
 } item_t;
 
 
