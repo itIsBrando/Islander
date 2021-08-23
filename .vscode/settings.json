@@ -4,7 +4,8 @@
         "defines.h": "c",
         "chunk.h": "c",
         "player.h": "c",
-        "main.h": "c"
+        "main.h": "c",
+        "crafting.h": "c"
     },
     "C_Cpp.default.includePath": ["/opt/gbdk/include"]
 }

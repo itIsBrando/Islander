@@ -19,6 +19,9 @@ typedef struct {
 
 
 const goal_t *goal_get_current();
-void goal_generate_name(goal_t *goal, char *buffer, uint8_t size);
+void goal_generate_name(const goal_t *goal, char *buffer, uint8_t size);
+void goal_print_active();
+
+bool goal_check_completion();
 
 #endif

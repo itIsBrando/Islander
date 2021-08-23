@@ -10,6 +10,7 @@ typedef struct {
     uint8_t hp; // strength of items
     tile_t id;
     uint8_t item_id; // id of item to drop when mined
+    void (*onmine)(uint8_t, uint8_t, tile_t); // optional event. Called when a tile is destroyed by a player
 } tile_data_t;
 
 

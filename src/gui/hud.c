@@ -13,16 +13,30 @@ static uint8_t hud_cur_id;
 // These are sprite ids corresponding to each of the player's inventory slots
 static uint8_t hud_item_ids[10];
 
+
+/**
+ * Initializes and draws the player's hotbar
+ */
+inline void hud_init()
+{
+    hud_cur_id = spr_new(10, 150, 11);
+    move_win(WINDOW_X, WINDOW_Y);
+    set_sprite_prop(hud_cur_id, BIT(4));
+
+    hud_print_hotbar();
+
+    SHOW_WIN;
+}
+
+
 /**
  * Draws the player's inventory onto the window
  */
-void hud_draw_hotbar(player_t *plr)
+void hud_print_hotbar()
 {
     const uint8_t t[] = {7, 10, 8, 9};
     uint8_t i;
 
-    hud_cur_id = spr_allocate();
-    move_win(7, 144 - 24);
 
     // draw item icon borders
     for(i = 0; i <  10; i++) {
@@ -30,15 +44,9 @@ void hud_draw_hotbar(player_t *plr)
     }
 
     // draws the inventory
-    for(i = 0; i < plr->inventory.size; i++) {
-        hud_item_ids[i] = itm_draw_icon(&plr->inventory.items[i], 3 + (i << 4), 10);
+    for(i = 0; i < player.inventory.size; i++) {
+        hud_item_ids[i] = itm_draw_icon(&player.inventory.items[i], 3 + (i << 4), 10);
     }
-
-    SHOW_WIN;
-
-    set_sprite_tile(hud_cur_id, 11);
-    set_sprite_prop(hud_cur_id, BIT(4));
-    hud_move_cur(DIRECTION_RIGHT);
 }
 
 
@@ -54,13 +62,13 @@ void hud_move_cur(const direction_t dir)
         
         hud_cur--;
     } else {
-        if(hud_cur > player.inventory.size)
+        if(hud_cur + 1 >= player.inventory.size)
             return;
 
         hud_cur++;
     }
     
-    move_sprite(hud_cur_id, 10 + (hud_cur << 4), 150);
+    scroll_sprite(hud_cur_id, dir_get_x(dir) << 4, 0);
 }
 
 
@@ -78,4 +86,45 @@ void hud_remove_item()
         hud_move_cur(DIRECTION_LEFT);
 
     spr_free(id);
+}
+
+
+/**
+ * Adds an item icon to the player's hotbar
+ */
+void hud_add_item(const uint8_t id)
+{
+    const u8 index = player.inventory.size - 1;
+    
+    hud_item_ids[index] = itm_draw_icon(itm_lookup(&player.inventory, id), 3 + (index << 4), 10);
+}
+
+
+/**
+ * Moves the window & HUD related sprites north
+ */
+inline void hud_scroll_north()
+{
+    WY_REG--;
+
+    for(u8 i = 0; i < player.inventory.size; i++) {
+        scroll_sprite(hud_item_ids[i], 0, -1);
+    }
+
+    scroll_sprite(hud_cur_id, 0, -1);
+}
+
+
+/**
+ * Moves the window & HUD related sprites south
+ */
+inline void hud_scroll_south()
+{
+    WY_REG++;
+
+    for(u8 i = 0; i < player.inventory.size; i++) {
+        scroll_sprite(hud_item_ids[i], 0, 1);
+    }
+
+    scroll_sprite(hud_cur_id, 0, 1);
 }

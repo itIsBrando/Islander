@@ -12,6 +12,7 @@ void clear_bg();
 void waitjoypad(const uint8_t);
 void waitPressed(const uint8_t);
 
+void print_char_window(char, uint8_t, uint8_t);
 void print(const unsigned char *, uint8_t, uint8_t);
 void print_window(const unsigned char *, uint8_t, uint8_t);
 void printInt(uint16_t, uint8_t, uint8_t, const bool);

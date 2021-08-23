@@ -10,5 +10,11 @@ void plr_init();
 void plr_update(const uint8_t);
 void plr_move(const direction_t dir);
 void plr_interact();
+void plr_hide();
+void plr_show();
+
+item_t *plr_get_active_item();
+void plr_sub_from_inventory(const uint8_t id, const int8_t count);
+void plr_add_id_to_inventory(const uint8_t id, const int8_t count);
 
 #endif

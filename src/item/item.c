@@ -11,7 +11,7 @@
  * @param _placable true if it can placed on surfaces
  * @param _tile tile of ITEM representation
  */
-#define DEFINE_ITEM(_name, _placable, _is_tool, _level, _tile, ...) {\
+#define MAKE_ITEM(_name, _placable, _is_tool, _level, _tile, ...) {\
     .name=_name,\
     .placable=_placable,\
     .is_tool=_is_tool,\
@@ -27,8 +27,11 @@ bool bridge_can_place(tile_t tile) {
 
 
 const item_data_t itm_data[] = {
-    [ITEM_STONE_PICK] = DEFINE_ITEM("PICK", NULL, true, 0, 17),
-    [ITEM_WOOD] = DEFINE_ITEM("WOOD", bridge_can_place, false, 0, 33)
+    [ITEM_STONE_PICK] = MAKE_ITEM("PICK", NULL, true, 0, 17),
+    [ITEM_WOOD] = MAKE_ITEM("WOOD", bridge_can_place, false, 0, 33),
+    [ITEM_STONE] = MAKE_ITEM("STONE", false, false, 0, 19),
+    [ITEM_COAL] = MAKE_ITEM("COAL", false, false, 0, 49),
+    [ITEM_BRIDGE] = MAKE_ITEM("BRIDGE", bridge_can_place, false, 0, 35),
 };
 
 
@@ -43,7 +46,7 @@ inline uint8_t itm_get_tile_damage(const item_t *item)
 
 bool itm_can_interact(const item_t *item, tile_t tile)
 {
-    item_data_t *d = &ITEM_LOOKUP(item);
+    const item_data_t *d = &ITEM_LOOKUP(item);
 
     if(d->placable)
         return d->placable(tile);
@@ -86,12 +89,6 @@ uint8_t itm_draw_icon(const item_t *item, uint8_t x, uint8_t y)
 }
 
 
-inline void itm_free_icon(uint8_t i)
-{
-    spr_free(i);
-}
-
-
 /**
  * Draws data about an item. Very customizable function. You can draw sprites and text to shox information about an item
  * @param item item to draw
@@ -106,22 +103,26 @@ uint8_t itm_draw(const item_t *item, uint8_t x, uint8_t y, itm_draw_flag_t flags
     const char *name = ITEM_LOOKUP(item).name;
     uint8_t id = 255;
     
-    if(flags & DRAW_ITEM_ICON) {
+    if(flags & DRAW_ITEM_PIXEL_GRID) {
         id = itm_draw_icon(item, x << 3, y << 3);
         x++;
+    } else if(flags & DRAW_ITEM_TILE_GRID) {
+        fill_win_rect(x++, y, 1, 1, ITEM_LOOKUP(item).tile);
     }
 
     if(flags & DRAW_ITEM_NAME)
     {
         print_window(name, x, y);
-        x += strlen(name) + 1;
+        x += strlen(name);
+        fill_win_rect(x++, y, 1, 1, 0);
     }
     
-    if(flags & DRAW_ITEM_COUNT)
+    if((flags & DRAW_ITEM_COUNT) && !ITEM_LOOKUP(item).is_tool) {
         printInt(item->count, x, y, true);
+        x += item->count > 9 ? 2 : 1;
+    }
+    print_window("\xE6\xE6\xE6\xE6\xE6\xE6", x, y);
 
-
-    
     return id;
 }
 
@@ -147,7 +148,7 @@ item_t *itm_lookup(inv_t *inv, const uint8_t id)
  * Checks to see if an item is present in an inventory
  * @returns true if `inv` has `id` with at least `count` items
  */
-bool itm_contains_id(inv_t *inv, const uint8_t id, const int8_t count)
+bool itm_contains_id(const inv_t *inv, const uint8_t id, const int8_t count)
 {
     if(!inv->size)
         return false;
@@ -176,17 +177,21 @@ bool itm_contains_id(inv_t *inv, const uint8_t id, const int8_t count)
  * @returns true if `inv` has `item` with at least `count` items
  * @see `itm_contains_id`
  */
-inline bool itm_contains(inv_t *inv, const item_t *item, const int8_t count)
+inline bool itm_contains(const inv_t *inv, const item_t *item, const int8_t count)
 {
     return itm_contains_id(inv, item->id, count);
 }
 
 
-inline bool itm_add_id_to_inventory(inv_t *inv, const uint8_t id)
+/**
+ * @todo add `count` parameter
+ */
+inline bool itm_add_id_to_inventory(inv_t *inv, const uint8_t id, const uint8_t count)
 {
-    item_t item = {.id = id, .count = 1};
+    item_t item = {.id = id, .count = count};
     return itm_add_to_inventory(inv, &item);
 }
+
 
 /**
  * Adds an item to an inventory. Does nothing if inventory is full

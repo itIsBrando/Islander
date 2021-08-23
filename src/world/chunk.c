@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "chunk.h"
+#include "spawn.h"
 #include "../main.h"
 #include "../structs.h"
 
@@ -125,6 +126,12 @@ void cnk_init()
 
     cnk_xMin = 3, cnk_xMax = 6;
     cnk_yMin = 3, cnk_yMax = 6;
+
+    // populate the loaded chunks with cool hoot
+    u8 i = 0;
+    do {
+        i += spwn_do_tick();
+    } while (i < CHUNK_INITIAL_SPAWNS);
 }
 
 
@@ -135,6 +142,9 @@ void cnk_init()
 bool cnk_load_row(const direction_t dir)
 {
     if((dir == DIRECTION_UP && cnk_yMin == 0) || (dir == DIRECTION_DOWN && cnk_yMax == 8))
+        return false;
+
+    if((dir == DIRECTION_LEFT && cnk_xMin == 0) || (dir == DIRECTION_RIGHT && cnk_xMax == 8))
         return false;
 
     active_chunk_t *ac = active_chunks;

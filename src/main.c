@@ -9,7 +9,9 @@
 #include "structs.h"
 #include "main.h"
 #include "oam.h"
+#include "gui/hud.h"
 #include "entity/player.h"
+#include "entity/particle.h"
 #include "world/chunk.h"
 #include "world/spawn.h"
 
@@ -58,6 +60,7 @@ void initGame() {
 
     cnk_init();
     plr_init();
+    hud_init();
 
     cnk_draw_active();
 
@@ -82,6 +85,8 @@ void vbl_main_loop() {
     if(main_counter++ == 0)
         spwn_do_tick();
 
+    eff_update();
+
     if(shake_x) {
         int8_t off;
         if(shake_x < 0) {
@@ -93,7 +98,7 @@ void vbl_main_loop() {
         }
 
         int8_t xOff = shake_x * 2 + off;
-        SCX_REG += xOff;
+        scroll_bkg(xOff, 0);
         move_sprite(player.id, PLR_SCRN_X + shake_x, PLR_SCRN_Y);
         
         shake_x = -shake_x;
@@ -139,6 +144,20 @@ void waitPressed(const uint8_t mask)
     waitjoypad(mask);
 }
 
+
+void print_char_window(char c, uint8_t x, uint8_t y)
+{
+    if(c >= 'A' && c <= 'Z')
+        c = c - 'A' + 0xA1;
+    else if(c >= 'a' && c <= 'z')
+        c = c - 'a' + 0xC1;
+    else if(c >= '!' && c <= '@')
+        c = c - '!' + 0x81;
+    else if(c == ' ')
+        c = 0;
+
+    fill_win_rect(x, y, 1, 1, c);
+}
 
 /**
  * For internal operation
@@ -207,7 +226,7 @@ void printInt(uint16_t num, uint8_t tx, uint8_t ty, const bool onWindow) {
     
     // put all digits into a buffer
     do {
-        digits[i++] = (num % 10) + 0x90;
+        digits[i++] = (num % 10) + FONT_BASE - FONT_START + '0';
         num /= 10;
     } while(num > 0);
 
