@@ -10,7 +10,7 @@ void hud_print_hotbar();
 void hud_move_cur(const direction_t dir);
 
 
-void hud_remove_item();
+void hud_remove_item(const uint8_t index);
 void hud_add_item(const uint8_t id);
 
 void hud_scroll_north();

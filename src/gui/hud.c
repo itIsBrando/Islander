@@ -73,17 +73,21 @@ void hud_move_cur(const direction_t dir)
 
 
 /**
- * @param id id of item removed. (not really necessary)
+ * @param index index of item removed.
  */
-void hud_remove_item()
+void hud_remove_item(const uint8_t index)
 {
-    const u8 index = player.inventory.size;
     const u8 id = hud_item_ids[index];
-
-    move_sprite(id, 0, 0);
+    printInt(hud_item_ids[index], 0, 0, true);
+    printInt(index, 0, 1, true);
 
     if(hud_cur == index)
         hud_move_cur(DIRECTION_LEFT);
+    
+    for(uint8_t i = index; i < player.inventory.size; i++) {
+        hud_item_ids[i] = hud_item_ids[i + 1];
+        scroll_sprite(hud_item_ids[i], -16, 0);
+    }
 
     spr_free(id);
 }

@@ -46,14 +46,12 @@ void eff_update()
         if(p->frames_active++ >= 100) {
             // delete my dude
             eff_active--;
-            move_sprite(p->id1, 0, 0);
-            move_sprite(p->id2, 0, 0);
             spr_free(p->id1);
             spr_free(p->id2);
             memcpy(&eff_list[i], &eff_list[i + 1], (eff_active - i) * sizeof(eff_list[0]));
         } else if((p->frames_active & 3) == 3) {
-                scroll_sprite(p->id1, 0, -1);
-                scroll_sprite(p->id2, 0, -1);
+            scroll_sprite(p->id1, 0, -1);
+            scroll_sprite(p->id2, 0, -1);
         }
 
         p++;

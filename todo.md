@@ -5,6 +5,7 @@
 - [ ] Add entities (crafting benches)
 - [ ] Add iron ore
 - [ ] Add iron pick
+- [ ] Add benchless crafting recipes
 - [x] Add wood
 - [x] Add rocks
 - [x] Add trees
@@ -30,5 +31,5 @@
 ## Bug Fixes:
 - [ ] Random graphical glitches that seem to only occur after `shake()` is called frequently
 - [ ] Obstacles can spawn on top of the player
-- [ ] Graphical bug occurs when item is removed from inventory and is not the last item in the hotbar
-- [ ] 
+- [x] ***PLAYER ITEM REMOVAL CAN CRASH GAME***
+- [x] Graphical bug occurs when item is removed from inventory and is not the last item in the hotbar

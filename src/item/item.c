@@ -32,6 +32,7 @@ const item_data_t itm_data[] = {
     [ITEM_STONE] = MAKE_ITEM("STONE", false, false, 0, 19),
     [ITEM_COAL] = MAKE_ITEM("COAL", false, false, 0, 49),
     [ITEM_BRIDGE] = MAKE_ITEM("BRIDGE", bridge_can_place, false, 0, 35),
+    [ITEM_WORKBENCH] = MAKE_ITEM("BENCH", true, false, 0, 36),
 };
 
 

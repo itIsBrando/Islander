@@ -71,9 +71,9 @@ Area                       Addr        Size        Decimal Bytes (Attributes)
      00000007  l__HEADER |    00000008  l__HEADER |    0000001A  l__BSS   
      00000026  l__GSINIT |    0000002C  l__HEADER |    00000033  l__HEADER
      0000006A  l__HOME   |    0000007E  l__HEADER |    00000200  s__CODE  
-     0000063C  l__BASE   |    0000194A  l__DATA   |    000027C7  l__CODE  
-     000029C7  s__HOME   |    00002A31  s__BASE   |    0000306D  s__CODE_0
-     0000306D  s__GSINIT |    0000306D  s__LIT    |    00003093  s__GSFINA
+     0000063C  l__BASE   |    0000194A  l__DATA   |    000028BD  l__CODE  
+     00002ABD  s__HOME   |    00002B27  s__BASE   |    00003163  s__CODE_0
+     00003163  s__GSINIT |    00003163  s__LIT    |    00003189  s__GSFINA
      0000C000  _shadow_O |    0000C0A0  s__DATA   |    0000D9EA  s__BSS   
      0000DA04  s__HEAP   |    0000E000  .STACK    |    0000FF80  .refresh_
 ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
@@ -81,43 +81,43 @@ Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_CODE                  00000200    000027C7 =       10183. bytes (REL,CON)
+_CODE                  00000200    000028BD =       10429. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
      00000200  _spr_flus |    00000210  _spr_hide |    00000231  _spr_show
      0000024A  _spr_allo |    0000029D  _spr_new  |    000002D8  _spr_free
-     000002E6  _main     |    0000033C  _initGame |    000003AB  _vbl_main
-     000003F6  _shake    |    0000041F  _waitjoyp |    0000042C  _waitPres
-     0000044D  _print_ch |    000005D5  _print    |    000005ED  _print_wi
-     00000606  _printInt |    000006CF  _debug    |    000006E2  _empty_oa
-     000006F2  _clear_bg |    00000707  _dir_get_ |    0000071D  _dir_get_
-     0000074F  _tile_dat |    00000782  _tile_dat |    000007A0  _tile_can
-     000007BE  _cnk_acti |    00000826  _islands  |    0000086E  _cnk_isla
-     00000978  _cnk_init |    00000A59  _cnk_load |    00000C5A  _cnk_draw
-     00000CB0  _cnk_get_ |    00000CFE  _spwn_do_ |    00000DE0  _map_get_
-     00000E19  _SPRITE_D |    00001619  _plr_init |    000016AB  _plr_upda
-     000017DC  _plr_hide |    000017EF  _plr_show |    00001802  _plr_sub_
-     00001830  _plr_add_ |    0000188D  _plr_get_ |    0000189A  _plr_inte
-     00001A2E  _plr_move |    00001B56  _eff_new  |    00001BB3  _eff_upda
-     00001CCA  _bridge_c |    00001CD4  _itm_get_ |    00001CEF  _itm_data
-     00001D35  _itm_can_ |    00001D5F  _itm_get_ |    00001D74  _itm_get_
-     00001D8C  _itm_draw |    00001DE9  _itm_draw |    00001F2D  _itm_look
-     00001F6A  _itm_cont |    00001FC5  _itm_cont |    00001FDD  _itm_add_
-     00002001  _itm_add_ |    00002076  _itm_sub_ |    00002138  _goal_get
-     00002140  _all_goal |    00002149  _goal_gen |    000022D5  _goal_pri
-     00002309  _goal_che |    00002388  _rcpe_can |    000023C0  _WORKBENC
-     00002410  _rcpe_cra |    00002470  _rcpe_dra |    000024D0  _cft_draw
-     000024E0  _cft_open |    0000266D  _hud_init |    0000269F  _hud_prin
-     00002726  _hud_move |    00002780  _hud_remo |    000027B0  _hud_add_
-     000027EC  _hud_scro |    00002827  _hud_scro |    00002861  __divsuch
-     00002870  __modsuch |    0000287C  __divusch |    0000288E  __modusch
-     0000289E  __divscha |    000028AC  __modscha |    000028B8  __divsint
-     000028CB  __modsint |    000028DC  __divucha |    000028EA  __moducha
-     000028F6  __divuint |    00002909  __moduint |    0000291A  .div8    
-     0000291A  .mod8     |    00002922  .div16    |    00002922  .mod16   
-     00002958  .divu8    |    00002958  .modu8    |    0000295B  .divu16  
-     0000295B  .modu16   |    0000299C  _rand     |    0000299C  _randw   
+     000002F3  _main     |    00000349  _initGame |    000003B8  _vbl_main
+     00000403  _shake    |    0000042C  _waitjoyp |    00000439  _waitPres
+     0000045A  _print_ch |    000005E2  _print    |    000005FA  _print_wi
+     00000613  _printInt |    000006DC  _debug    |    000006EF  _empty_oa
+     000006FF  _clear_bg |    00000714  _dir_get_ |    0000072A  _dir_get_
+     0000075C  _tile_dat |    0000078F  _tile_dat |    000007AD  _tile_can
+     000007CB  _cnk_acti |    00000833  _islands  |    0000087B  _cnk_isla
+     00000985  _cnk_init |    00000A66  _cnk_load |    00000C67  _cnk_draw
+     00000CBD  _cnk_get_ |    00000D0B  _spwn_do_ |    00000DED  _map_get_
+     00000E26  _SPRITE_D |    00001626  _plr_init |    000016B8  _plr_upda
+     000017E9  _plr_hide |    000017FC  _plr_show |    0000180F  _plr_sub_
+     0000184C  _plr_add_ |    000018A9  _plr_get_ |    000018B6  _plr_inte
+     00001A4A  _plr_move |    00001B72  _eff_new  |    00001BCF  _eff_upda
+     00001CB3  _bridge_c |    00001CBD  _itm_get_ |    00001CD8  _itm_data
+     00001D2B  _itm_can_ |    00001D55  _itm_get_ |    00001D6A  _itm_get_
+     00001D82  _itm_draw |    00001DDF  _itm_draw |    00001F23  _itm_look
+     00001F60  _itm_cont |    00001FBB  _itm_cont |    00001FD3  _itm_add_
+     00001FF7  _itm_add_ |    0000206C  _itm_sub_ |    0000212E  _goal_get
+     00002136  _all_goal |    00002142  _goal_gen |    000022F9  _goal_pri
+     0000232D  _goal_che |    000023AF  _rcpe_can |    000023E7  _WORKBENC
+     00002437  _rcpe_cra |    00002497  _rcpe_dra |    000024F7  _cft_draw
+     00002545  _cft_open |    00002710  _hud_init |    00002742  _hud_prin
+     000027C9  _hud_move |    00002823  _hud_remo |    000028A6  _hud_add_
+     000028E2  _hud_scro |    0000291D  _hud_scro |    00002957  __divsuch
+     00002966  __modsuch |    00002972  __divusch |    00002984  __modusch
+     00002994  __divscha |    000029A2  __modscha |    000029AE  __divsint
+     000029C1  __modsint |    000029D2  __divucha |    000029E0  __moducha
+     000029EC  __divuint |    000029FF  __moduint |    00002A10  .div8    
+     00002A10  .mod8     |    00002A18  .div16    |    00002A18  .mod16   
+     00002A4E  .divu8    |    00002A4E  .modu8    |    00002A51  .divu16  
+     00002A51  .modu16   |    00002A92  _rand     |    00002A92  _randw   
 ASxxxx Linker V03.00 + NoICE + sdld,  page 4.
 Hexadecimal  [32-Bits]
 
@@ -283,50 +283,50 @@ Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_HOME                  000029C7    0000006A =         106. bytes (REL,CON)
+_HOME                  00002ABD    0000006A =         106. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     000029C7  .remove_V |    000029CA  .remove_i |    000029E7  .add_VBL 
-     000029EA  .add_int  |    000029F5  .wait_vbl |    000029F5  _wait_vbl
-     00002A04  .display_ |    00002A04  _display_ |    00002A1B  _remove_V
-     00002A26  _add_VBL 
+     00002ABD  .remove_V |    00002AC0  .remove_i |    00002ADD  .add_VBL 
+     00002AE0  .add_int  |    00002AEB  .wait_vbl |    00002AEB  _wait_vbl
+     00002AFA  .display_ |    00002AFA  _display_ |    00002B11  _remove_V
+     00002B1C  _add_VBL 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 22.
 Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_BASE                  00002A31    0000063C =        1596. bytes (REL,CON)
+_BASE                  00002B27    0000063C =        1596. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     00002A31  _fill_win |    00002A43  _strcpy   |    00002A55  _initrand
-     00002A57  .initrand |    00002A60  _set_bkg_ |    00002A60  _set_win_
-     00002A68  _set_spri |    00002AD6  _set_win_ |    00002AEA  _set_bkg_
-     00002AEA  _set_win_ |    00002AF2  _set_spri |    00002B22  .fill_rec
-     00002B2B  .fill_rec |    00002B78  _fill_bkg |    00002B8A  .padup   
-     00002B8A  _waitpadu |    00002B9A  .jpad     |    00002B9A  _joypad  
-     00002BC2  _waitpad  |    00002BC5  .wait_pad |    00002BCC  ___memcpy
-     00002BCC  _memcpy   |    00002C0F  ___sdcc_c |    00002C10  _memset  
-     00002C43  _font_ibm |    00002FF5  _strlen   |    00002FFA  .strlen  
-     00003003  _set_bkg_ |    00003017  .set_xy_w |    00003020  .set_xy_b
-     0000302F  .set_xy_t
+     00002B27  _fill_win |    00002B39  _strcpy   |    00002B4B  _initrand
+     00002B4D  .initrand |    00002B56  _set_bkg_ |    00002B56  _set_win_
+     00002B5E  _set_spri |    00002BCC  _set_win_ |    00002BE0  _set_bkg_
+     00002BE0  _set_win_ |    00002BE8  _set_spri |    00002C18  .fill_rec
+     00002C21  .fill_rec |    00002C6E  _fill_bkg |    00002C80  .padup   
+     00002C80  _waitpadu |    00002C90  .jpad     |    00002C90  _joypad  
+     00002CB8  _waitpad  |    00002CBB  .wait_pad |    00002CC2  ___memcpy
+     00002CC2  _memcpy   |    00002D05  ___sdcc_c |    00002D06  _memset  
+     00002D39  _font_ibm |    000030EB  _strlen   |    000030F0  .strlen  
+     000030F9  _set_bkg_ |    0000310D  .set_xy_w |    00003116  .set_xy_b
+     00003125  .set_xy_t
 ASxxxx Linker V03.00 + NoICE + sdld,  page 23.
 Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_GSINIT                0000306D    00000026 =          38. bytes (REL,CON)
+_GSINIT                00003163    00000026 =          38. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     0000306D  gsinit   
+     00003163  gsinit   
 ASxxxx Linker V03.00 + NoICE + sdld,  page 24.
 Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_GSFINAL               00003093    00000001 =           1. bytes (REL,CON)
+_GSFINAL               00003189    00000001 =           1. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
@@ -931,20 +931,20 @@ _SFR36                 00000000    00000001 =           1. bytes (ABS,CON)
 Files Linked                              [ module(s) ]
 
 /opt/gbdk/lib/small/asxxxx/gb/crt0.o      [ Runtime ]
-/tmp/lcc81230.o                           [ oam ]
-/tmp/lcc81231.o                           [ main ]
-/tmp/lcc81232.o                           [ tile ]
-/tmp/lcc81233.o                           [ chunk ]
-/tmp/lcc81234.o                           [ spawn ]
-/tmp/lcc81235.o                           [ collision ]
-/tmp/lcc81236.o                           [ sprite ]
-/tmp/lcc81237.o                           [ player ]
-/tmp/lcc81238.o                           [ particle ]
-/tmp/lcc81239.o                           [ item ]
-/tmp/lcc812310.o                          [ goal ]
-/tmp/lcc812311.o                          [ recipe ]
-/tmp/lcc812312.o                          [ crafting ]
-/tmp/lcc812313.o                          [ hud ]
+/tmp/lcc64210.o                           [ oam ]
+/tmp/lcc64211.o                           [ main ]
+/tmp/lcc64212.o                           [ tile ]
+/tmp/lcc64213.o                           [ chunk ]
+/tmp/lcc64214.o                           [ spawn ]
+/tmp/lcc64215.o                           [ collision ]
+/tmp/lcc64216.o                           [ sprite ]
+/tmp/lcc64217.o                           [ player ]
+/tmp/lcc64218.o                           [ particle ]
+/tmp/lcc64219.o                           [ item ]
+/tmp/lcc642110.o                          [ goal ]
+/tmp/lcc642111.o                          [ recipe ]
+/tmp/lcc642112.o                          [ crafting ]
+/tmp/lcc642113.o                          [ hud ]
 
 
 Libraries Linked                          [ object file ]

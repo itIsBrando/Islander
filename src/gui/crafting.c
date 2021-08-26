@@ -4,6 +4,7 @@
 #include "../main.h"
 #include "../item/item.h"
 #include "../item/recipe.h"
+#include "../item/goal.h"
 #include "../entity/player.h"
 #include "crafting.h"
 #include "hud.h"
@@ -17,12 +18,16 @@ void cft_draw_requirements(const recipe_t *recipe)
 {
     rcpe_draw(recipe, WX_TILE_OFFSET + 9, WY_TILE_OFFSET + 2);       
 
-/*     if(rcpe_can_craft(&player.inventory, recipe))
-    {
-        print_window("CRAFTABLE    ", WX_TILE_OFFSET + 9, WY_TILE_OFFSET + 2 + 8);
-    } else
-        print_window("NOT CRAFTABLE", WX_TILE_OFFSET + 9, WY_TILE_OFFSET + 2 + 8);
-*/
+    print_window("CRAFT", WX_TILE_OFFSET + 10, WY_TILE_OFFSET + 10);
+
+    fill_win_rect(
+        WX_TILE_OFFSET + 9,
+        WY_TILE_OFFSET + 10,
+        1,
+        1,
+        rcpe_can_craft(&player.inventory, recipe) ? 64 : 65
+    );
+
 }
 
 
@@ -76,12 +81,19 @@ void cft_open_menu(const bench_t bench)
             scroll_sprite(cur_id, 0, 8);
         }
 
-        waitjoypad(J_DOWN | J_UP);
+        // check craftable
+        if((j & J_A) && rcpe_can_craft(&player.inventory, &bench[i]))
+        {
+            rcpe_craft(&bench[i]);
+            cft_draw_requirements(&bench[i]);
+            goal_check_completion();
+        }
+
+        waitjoypad(J_DOWN | J_UP | J_A);
 
         wait_vbl_done();
     } while(!(j & J_B));
 
-    move_sprite(cur_id, 0, 0);
     spr_free(cur_id);
 
     plr_show();

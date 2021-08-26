@@ -160,11 +160,21 @@ void plr_show()
  */
 void plr_sub_from_inventory(const uint8_t id, const int8_t count)
 {
-    item_t *item = itm_lookup(&player.inventory, id);
+    item_t *item;
+    uint8_t i = 0;
+
+    for(; i < player.inventory.size; i++)
+    {
+        if(player.inventory.items[i].id == id)
+        {
+            item = &player.inventory.items[i];
+            break;
+        }
+    }
 
     if(itm_sub_from_inventory(&player.inventory, id, count)) {
-        hud_remove_item();
-        item->id = 0xFF; // remove item from recognizable ids
+        hud_remove_item(i);
+        // item->id = 0xFF; // remove item from recognizable ids
     }
 }
 

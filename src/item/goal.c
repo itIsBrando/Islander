@@ -15,6 +15,7 @@
 
 const goal_t all_goals[] = {
     MAKE_GOAL(GOAL_TYPE_COLLECT, ITEM_WOOD, 12),
+    MAKE_GOAL(GOAL_TYPE_CRAFT, ITEM_BRIDGE, 4),
     MAKE_GOAL(GOAL_TYPE_COLLECT, ITEM_STONE, 8),
     MAKE_GOAL(GOAL_TYPE_COLLECT, ITEM_STONE, 99), // @todo remove
 };
@@ -36,11 +37,12 @@ inline const goal_t *goal_get_current()
 void goal_generate_name(const goal_t *goal, char *buffer, uint8_t size)
 {
     const char const names[][8] = { "Craft", "Collect", "Mine" };
+    const uint8_t len = strlen(names[goal->type]);
 
     memset(buffer, ' ', size);
-    memcpy(buffer, names[goal->type], 7 * sizeof(char));
+    memcpy(buffer, names[goal->type], len);
     
-    buffer += 8;
+    buffer += len + 1;
 
     *buffer++ = 'x';
 
@@ -87,11 +89,12 @@ bool goal_check_completion()
 
     if(itm_contains(&player.inventory, &goal->item, goal->item.count))
     {
-        u8 i;
+        u8 i = 0;
         cur_goal++;
         
         print_window("Goal complete!   ", 0, 3);
-        for(i = 0; i < 8; i++)
+
+        while(WY_REG > WINDOW_Y - 8)
         {
             hud_scroll_north();
             wait_vbl_done();

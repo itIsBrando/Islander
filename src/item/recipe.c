@@ -15,8 +15,8 @@
 }
 
 const bench_t WORKBENCH = {
-    MAKE_RECIPE(0, 1, 0, 1, 0, 1, ITEM_COAL, 3),
-    MAKE_RECIPE(ITEM_WOOD, 6, 0, 0, 0, 0, ITEM_BRIDGE, 2),
+    MAKE_RECIPE(ITEM_STONE, 10, ITEM_WOOD, 10, 0, 0, ITEM_WORKBENCH, 1),
+    MAKE_RECIPE(ITEM_WOOD, 3, 0, 0, 0, 0, ITEM_BRIDGE, 1),
 };
 
 
@@ -29,7 +29,7 @@ bool rcpe_can_craft(const inv_t *inv, const recipe_t *recipe)
 
     for(uint8_t i = 0; i < 3; i++)
     {
-        if(item->count != 0) {
+        if(item->count == 0) {
             return true;
         } else if(!itm_contains(inv, item, item->count)) {
             return false;

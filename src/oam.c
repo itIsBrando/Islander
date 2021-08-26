@@ -78,5 +78,6 @@ uint8_t spr_new(const uint8_t x, const uint8_t y, const uint8_t tile)
  * - does not visually clear sprite
  */
 inline void spr_free(uint8_t i) {
+    move_sprite(i, 0, 0);
     spr_candidates[i] = false;
 }
