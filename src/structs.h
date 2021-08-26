@@ -29,6 +29,7 @@ typedef enum {
     TILE_TREE_TOP = 47,
     TILE_TREE_BOTTOM = 63,
     TILE_BRIDGE = 35,
+    TILE_WORKBENCH = 36,
 } tile_t;
 
 typedef enum {
@@ -86,7 +87,7 @@ typedef struct {
     const bool is_tool : 1;
     tile_t tile;
     uint8_t level;
-    
+    uint8_t id_tile; // TILE_... This is what bridges the connection between an item_t and a tile_t
 } item_data_t;
 
 

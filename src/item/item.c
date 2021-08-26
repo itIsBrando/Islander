@@ -25,14 +25,22 @@ bool bridge_can_place(tile_t tile) {
     return tile == TILE_WATER;
 }
 
+/**
+ * Any tile that can be placed on the ground
+ */
+bool ground_can_place(tile_t tile) {
+    return tile == TILE_GROUND;
+}
+
 
 const item_data_t itm_data[] = {
     [ITEM_STONE_PICK] = MAKE_ITEM("PICK", NULL, true, 0, 17),
-    [ITEM_WOOD] = MAKE_ITEM("WOOD", bridge_can_place, false, 0, 33),
-    [ITEM_STONE] = MAKE_ITEM("STONE", false, false, 0, 19),
-    [ITEM_COAL] = MAKE_ITEM("COAL", false, false, 0, 49),
-    [ITEM_BRIDGE] = MAKE_ITEM("BRIDGE", bridge_can_place, false, 0, 35),
-    [ITEM_WORKBENCH] = MAKE_ITEM("BENCH", true, false, 0, 36),
+    [ITEM_WOOD] = MAKE_ITEM("WOOD", NULL, false, 0, 33),
+    [ITEM_STONE] = MAKE_ITEM("STONE", NULL, false, 0, 19),
+    [ITEM_COAL] = MAKE_ITEM("COAL", NULL, false, 0, 49),
+    [ITEM_BRIDGE] = MAKE_ITEM("BRIDGE", bridge_can_place, false, 0, 35, .id_tile=TILE_BRIDGE),
+    [ITEM_WORKBENCH] = MAKE_ITEM("BENCH", ground_can_place, false, 0, 36, .id_tile=TILE_WORKBENCH),
+    // [ITEM_FLOWER] = MAKE_ITEM("FLOWER", ground_can_place, false, 0, 34),
 };
 
 

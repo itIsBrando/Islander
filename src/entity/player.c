@@ -47,6 +47,10 @@ void plr_init()
     item_t pick = {.id = ITEM_STONE_PICK};
     itm_add_to_inventory(&player.inventory, &pick);
     goal_print_active();
+
+
+    itm_add_id_to_inventory(&player.inventory, ITEM_STONE, 20);
+    itm_add_id_to_inventory(&player.inventory, ITEM_WOOD, 20);
 }
 
 
@@ -234,7 +238,7 @@ inline void plr_interact()
             goal_check_completion();
         }
     } else if(itm_can_interact(item, *t)) {
-        cnk_active_write(x >> 3, y >> 3, TILE_BRIDGE);
+        cnk_active_write(x >> 3, y >> 3, ITEM_LOOKUP(item).id_tile);
         plr_sub_from_inventory(plr_get_active_item()->id, 1);
         plr_draw_active_item();
     }

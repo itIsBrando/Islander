@@ -19,6 +19,7 @@ void cft_draw_requirements(const recipe_t *recipe)
     rcpe_draw(recipe, WX_TILE_OFFSET + 9, WY_TILE_OFFSET + 2);       
 
     print_window("CRAFT", WX_TILE_OFFSET + 10, WY_TILE_OFFSET + 10);
+    print_window("need:", WX_TILE_OFFSET + 15 - 3, WY_TILE_OFFSET + 12);
 
     fill_win_rect(
         WX_TILE_OFFSET + 9,

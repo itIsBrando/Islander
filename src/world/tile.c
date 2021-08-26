@@ -17,12 +17,18 @@ static void tree_onmine(uint8_t x, uint8_t y, tile_t tile)
 }
 
 
+static void workbench_onmine(uint8_t x, uint8_t y, tile_t tile) {
+    
+}
+
+
 const tile_data_t tile_data[] = {
     MAKE_TILE(TILE_WATER, false, false, 0),
     MAKE_TILE(TILE_TREE_TOP, false, true, 10, .item_id=ITEM_WOOD, .onmine=tree_onmine),
     MAKE_TILE(TILE_TREE_BOTTOM, false, true, 10, .item_id=ITEM_WOOD, .onmine=tree_onmine),
     MAKE_TILE(TILE_STONE, false, true, 10, .item_id=ITEM_STONE),
     MAKE_TILE(TILE_COAL, false, true, 15, .item_id=ITEM_COAL),
+    MAKE_TILE(TILE_WORKBENCH, false, true, 9, .item_id=ITEM_WORKBENCH, .onmine=workbench_onmine),
 };
 
 
