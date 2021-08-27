@@ -109,6 +109,14 @@ uint8_t itm_draw_icon(const item_t *item, uint8_t x, uint8_t y)
  */
 uint8_t itm_draw(const item_t *item, uint8_t x, uint8_t y, itm_draw_flag_t flags)
 {
+    // if no item, then just clear text that would appear at that location
+    if(!item) {
+        if(flags & DRAW_ITEM_NAME)
+            fill_win_rect(x, y, 9, 1, 0);
+
+        return 255; // if item does not exist, do nothing
+    }
+    
     const char *name = ITEM_LOOKUP(item).name;
     uint8_t id = 255;
     

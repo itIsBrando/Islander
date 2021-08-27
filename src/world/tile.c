@@ -13,12 +13,17 @@ __VA_ARGS__\
 
 static void tree_onmine(uint8_t x, uint8_t y, tile_t tile)
 {
-        cnk_active_write(x, y + (tile == TILE_TREE_BOTTOM ? -1 : 1), TILE_GROUND);
+    cnk_active_write(x, y + (tile == TILE_TREE_BOTTOM ? -1 : 1), TILE_GROUND);
 }
 
 
+/**
+ * @param x relative active chunk x coordinate. [0-31]
+ * @param x relative active chunk y coordinate. [0-31]
+ * @param tile tile that is being mined
+ */
 static void workbench_onmine(uint8_t x, uint8_t y, tile_t tile) {
-    
+    cnk_active_write(x, y, TILE_GROUND);
 }
 
 

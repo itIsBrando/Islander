@@ -62,13 +62,14 @@ void hud_move_cur(const direction_t dir)
         
         hud_cur--;
     } else {
-        if(hud_cur + 1 >= player.inventory.size)
+        if(hud_cur >= 10)
             return;
 
         hud_cur++;
     }
     
     scroll_sprite(hud_cur_id, dir_get_x(dir) << 4, 0);
+    plr_draw_active_item();
 }
 
 
@@ -78,11 +79,6 @@ void hud_move_cur(const direction_t dir)
 void hud_remove_item(const uint8_t index)
 {
     const u8 id = hud_item_ids[index];
-    printInt(hud_item_ids[index], 0, 0, true);
-    printInt(index, 0, 1, true);
-
-    if(hud_cur == index)
-        hud_move_cur(DIRECTION_LEFT);
     
     for(uint8_t i = index; i < player.inventory.size; i++) {
         hud_item_ids[i] = hud_item_ids[i + 1];

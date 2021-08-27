@@ -96,6 +96,7 @@ void cft_open_menu(const bench_t bench)
     } while(!(j & J_B));
 
     spr_free(cur_id);
+    plr_draw_active_item();
 
     plr_show();
 
