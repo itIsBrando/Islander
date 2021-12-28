@@ -13,6 +13,8 @@ void plr_interact();
 void plr_hide();
 void plr_show();
 
+uint8_t plr_get_cursor_sprite_id();
+
 item_t *plr_get_active_item();
 void plr_sub_from_inventory(const uint8_t id, const int8_t count);
 void plr_add_id_to_inventory(const uint8_t id, const int8_t count);

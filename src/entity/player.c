@@ -4,7 +4,9 @@
 
 #include "player.h"
 #include "particle.h"
-#include "../main.h"
+#include "../world/shake.h"
+#include "../joypad.h"
+#include "../direction.h"
 #include "../oam.h"
 #include "../item/item.h"
 #include "../item/goal.h"
@@ -14,7 +16,7 @@
 #include "../gui/hud.h"
 #include "../gui/crafting.h"
 
-
+#include "../print.h"
 
 player_t player;
 
@@ -86,19 +88,19 @@ void plr_update(const uint8_t j)
 
     if(j & J_UP) {
         if(((player.y - 1) & 63) == 0) {
-            if(cnk_load_row(DIRECTION_UP))
+            if(cnk_load_row(DIRECTION_UP)) {
                 plr_move(DIRECTION_UP);
-
+                plr_move(DIRECTION_UP);
+            }
         } else {
             plr_move(DIRECTION_UP);
         }
-    }
-
-    if(j & J_DOWN) {
+    } else if(j & J_DOWN) {
         if(((player.y + 1) & 63) == 0) {
-            if(cnk_load_row(DIRECTION_DOWN))
+            if(cnk_load_row(DIRECTION_DOWN)) {
                 plr_move(DIRECTION_DOWN);
-
+                plr_move(DIRECTION_DOWN);
+            }
         } else {
             plr_move(DIRECTION_DOWN);
         }
@@ -107,8 +109,10 @@ void plr_update(const uint8_t j)
 
     if(j & J_LEFT) {
         if(((player.x - 1) & 63) == 0) {
-            if(cnk_load_row(DIRECTION_LEFT))
+            if(cnk_load_row(DIRECTION_LEFT)) {
                 plr_move(DIRECTION_LEFT);
+                plr_move(DIRECTION_LEFT);
+            }
         } else {
             plr_move(DIRECTION_LEFT);
         }
@@ -116,8 +120,10 @@ void plr_update(const uint8_t j)
     
     if(j & J_RIGHT) {
         if(((player.x + 1) & 63) == 0) {
-            if(cnk_load_row(DIRECTION_RIGHT))
+            if(cnk_load_row(DIRECTION_RIGHT)) {
                 plr_move(DIRECTION_RIGHT);
+                plr_move(DIRECTION_RIGHT);
+            }
         } else {
             plr_move(DIRECTION_RIGHT);
         }
@@ -205,6 +211,14 @@ void plr_add_id_to_inventory(const uint8_t id, const int8_t count)
 inline item_t *plr_get_active_item()
 {
     return &player.inventory.items[hud_cur];
+}
+
+
+/**
+ * @returns the sprite id of the player's cursor
+ */
+inline uint8_t plr_get_cursor_sprite_id() {
+    return cur_id;
 }
 
 

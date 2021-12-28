@@ -1,7 +1,8 @@
 #include <gb/gb.h>
 
 #include "hud.h"
-#include "../main.h"
+#include "../direction.h"
+#include "../print.h"
 #include "../oam.h"
 #include "../item/item.h"
 

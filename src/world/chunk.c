@@ -4,14 +4,15 @@
 #include "chunk.h"
 #include "spawn.h"
 #include "../main.h"
+#include "../direction.h"
 #include "../structs.h"
 
 world_t world;
 /**
  * So there are 9 islands total.
- * Islands are in a 3x3 grid
+ * Islands are arranged in a 3x3 grid
  * Each island is made of 3x3 array of chunks
- * Meaning there is a 9x9 array of chunks
+ * Meaning the world is composed of a 9x9 array of chunks
  * Each chunk is 8x8 tiles
  */
 
@@ -19,6 +20,18 @@ world_t world;
 active_chunk_t active_chunks[16];
 
 
+inline active_chunk_t *cnk_get_active_chunks()
+{
+    return active_chunks;
+}
+
+/**
+ * @brief Draws a chunk at an (tx, ty) position
+ * 
+ * @param x chunk x coordinate (0-3)
+ * @param y chunk y coordinate (0-3)
+ * @param chunk pointer to the chunk
+ */
 inline void cnk_draw(const u8 x, const u8 y, const chunk_t *chunk)
 {
     set_bkg_tiles((x & 3) << 3, (y & 3) << 3, 8, 8, chunk->tiles);
@@ -53,6 +66,7 @@ const stored_island_t islands[] = {
  * Writes a tile on the active chunks
  * @param x relative to the active chunk
  * @param y relative to the active chunk
+ * @todo improve performance by avoiding a complete redraw of the chunk
  */
 void cnk_active_write(u8 x, u8 y, u8 tile)
 {
@@ -64,18 +78,19 @@ void cnk_active_write(u8 x, u8 y, u8 tile)
 }
 
 
-
 /**
  * Creates a chunk out of an island
  * @param islandNumber island data
- * @param x [0-3) x coordinate for the placement of this island
- * @param y [0-3) y coordinate for the placement of this island
+ * @param xx [0-3) x coordinate for the placement of this island
+ * @param yy [0-3) y coordinate for the placement of this island
+ * @note remember that there are 3 islands in each direction.
  */
 void cnk_island_load(const uint8_t islandNumber, u8 xx, u8 yy)
 {
     xx *= 3;
+    yy *= 3;
     
-    u8 xChunk, yChunk = yy *= 3;
+    u8 xChunk, yChunk = yy;
     u8 tile = islands[islandNumber].tiles[0], offset = 0;
 
     for(u8 y = 0; y < 24; y++)
@@ -172,7 +187,7 @@ bool cnk_load_row(const direction_t dir)
             // cnk_unload(ac);
             // ac->xOffset = (ac->xChunk - 3) & 3;//(ac->xOffset + dx) & 3;
             // ac->yOffset = (ac->yChunk - 3) & 3;//(ac->yOffset + dy) & 3;
-            ac->chunk = &world.chunks[ac->xChunk + (ac->yChunk) * 9];
+            ac->chunk = &world.chunks[ac->xChunk + (ac->yChunk * 9)];
             
             cnk_draw(
                 ac->xOffset,

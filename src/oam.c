@@ -1,7 +1,7 @@
 
 #include "defines.h"
 #include "oam.h"
-#include "main.h"
+#include "print.h"
 
 #include <gb/gb.h>
 #include <string.h>

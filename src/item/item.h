@@ -39,6 +39,7 @@ uint8_t itm_draw(const item_t *item, uint8_t x, uint8_t y, itm_draw_flag_t flags
 
 bool itm_can_interact(const item_t *item, tile_t tile);
 
+uint8_t itm_get_count(const item_t *item);
 tile_t itm_get_tile(uint8_t itemNumber);
 const char *itm_get_name(const item_t *item);
 

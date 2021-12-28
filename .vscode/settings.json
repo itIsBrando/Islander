@@ -5,7 +5,11 @@
         "chunk.h": "c",
         "player.h": "c",
         "main.h": "c",
-        "crafting.h": "c"
+        "crafting.h": "c",
+        "goal.h": "c",
+        "particle.h": "c",
+        "shake.h": "c",
+        "print.h": "c"
     },
     "C_Cpp.default.includePath": ["/opt/gbdk/include"]
 }

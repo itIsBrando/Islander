@@ -1,7 +1,8 @@
 #include <gb/gb.h>
 
 #include "../oam.h"
-#include "../main.h"
+#include "../print.h"
+#include "../joypad.h"
 #include "../item/item.h"
 #include "../item/recipe.h"
 #include "../item/goal.h"
@@ -19,6 +20,15 @@ void cft_draw_requirements(const recipe_t *recipe)
     rcpe_draw(recipe, WX_TILE_OFFSET + 9, WY_TILE_OFFSET + 2);       
 
     print_window("CRAFT", WX_TILE_OFFSET + 10, WY_TILE_OFFSET + 10);
+    
+    // vvv prints out the current amount of item
+    print_window("HAVE:", WX_TILE_OFFSET + 8, WY_TILE_OFFSET + 8);
+    printInt(
+        itm_get_count(itm_lookup(&player.inventory, recipe->product.id)),
+        WX_TILE_OFFSET + 13,
+        WY_TILE_OFFSET + 8,
+        true
+    );
 
     fill_win_rect(
         WX_TILE_OFFSET + 9,

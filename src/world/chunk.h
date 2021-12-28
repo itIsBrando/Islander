@@ -8,8 +8,8 @@ void cnk_island_load(const uint8_t islandNumber, u8 xx, u8 yy);
 void cnk_init();
 void cnk_draw_active();
 
+active_chunk_t *cnk_get_active_chunks();
 
-bool cnk_north();
 bool cnk_load_row(const direction_t dir);
 
 

@@ -3,7 +3,7 @@
 
 #include "item.h"
 #include "../oam.h"
-#include "../main.h"
+#include "../print.h"
 
 
 /**
@@ -125,6 +125,20 @@ uint8_t itm_draw(const item_t *item, uint8_t x, uint8_t y, itm_draw_flag_t flags
     print_window("\xE6\xE6\xE6\xE6\xE6\xE6", x, y);
 
     return id;
+}
+
+
+/**
+ * Gets the number of items present in an `item_t` object
+ * @param item item to search. Can be `NULL`
+ * @return uint8_t count of item
+ */
+inline uint8_t itm_get_count(const item_t *item)
+{
+    if(!item)
+        return 0;
+    
+    return item->count;
 }
 
 

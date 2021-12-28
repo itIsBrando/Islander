@@ -4,7 +4,8 @@
 #include "goal.h"
 #include "item.h"
 #include "../gui/hud.h"
-#include "../main.h"
+#include "../print.h"
+#include "../joypad.h"
 
 
 
@@ -17,7 +18,7 @@ const goal_t all_goals[] = {
     MAKE_GOAL(GOAL_TYPE_COLLECT, ITEM_WOOD, 12),
     MAKE_GOAL(GOAL_TYPE_CRAFT, ITEM_BRIDGE, 4),
     MAKE_GOAL(GOAL_TYPE_COLLECT, ITEM_STONE, 8),
-    MAKE_GOAL(GOAL_TYPE_COLLECT, ITEM_STONE, 99), // @todo remove
+    MAKE_GOAL(GOAL_TYPE_COLLECT, ITEM_STONE, 99), // @todo remove. This line prevents an overflow of this array
 };
 
 static const goal_t *cur_goal = all_goals;
@@ -51,7 +52,7 @@ void goal_generate_name(const goal_t *goal, char *buffer, uint8_t size)
     
     // put all digits into a buffer
     do {
-        digits[i++] = (num % 10) + FONT_BASE - FONT_START + '0';
+        digits[i++] = (num % 10) + '0';
         num /= 10;
     } while(num > 0);
 
@@ -72,7 +73,7 @@ void goal_print_active()
     char const goal_str[20];
 
     goal_generate_name(goal_get_current(), goal_str, sizeof(goal_str));
-    print_window(goal_str, 0, 3);
+    print_small_window(goal_str, 0, 3);
 }
 
 
