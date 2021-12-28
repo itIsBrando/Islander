@@ -25,14 +25,22 @@ bool bridge_can_place(tile_t tile) {
     return tile == TILE_WATER;
 }
 
+/**
+ * Any tile that can be placed on the ground
+ */
+bool ground_can_place(tile_t tile) {
+    return tile == TILE_GROUND;
+}
+
 
 const item_data_t itm_data[] = {
     [ITEM_STONE_PICK] = MAKE_ITEM("PICK", NULL, true, 0, 17),
-    [ITEM_WOOD] = MAKE_ITEM("WOOD", bridge_can_place, false, 0, 33),
-    [ITEM_STONE] = MAKE_ITEM("STONE", false, false, 0, 19),
-    [ITEM_COAL] = MAKE_ITEM("COAL", false, false, 0, 49),
-    [ITEM_BRIDGE] = MAKE_ITEM("BRIDGE", bridge_can_place, false, 0, 35),
-    [ITEM_WORKBENCH] = MAKE_ITEM("BENCH", true, false, 0, 36),
+    [ITEM_WOOD] = MAKE_ITEM("WOOD", NULL, false, 0, 33),
+    [ITEM_STONE] = MAKE_ITEM("STONE", NULL, false, 0, 19),
+    [ITEM_COAL] = MAKE_ITEM("COAL", NULL, false, 0, 49),
+    [ITEM_BRIDGE] = MAKE_ITEM("BRIDGE", bridge_can_place, false, 0, 35, .id_tile=TILE_BRIDGE),
+    [ITEM_WORKBENCH] = MAKE_ITEM("BENCH", ground_can_place, false, 0, 36, .id_tile=TILE_WORKBENCH),
+    // [ITEM_FLOWER] = MAKE_ITEM("FLOWER", ground_can_place, false, 0, 34),
 };
 
 
@@ -101,6 +109,14 @@ uint8_t itm_draw_icon(const item_t *item, uint8_t x, uint8_t y)
  */
 uint8_t itm_draw(const item_t *item, uint8_t x, uint8_t y, itm_draw_flag_t flags)
 {
+    // if no item, then just clear text that would appear at that location
+    if(!item) {
+        if(flags & DRAW_ITEM_NAME)
+            fill_win_rect(x, y, 9, 1, 0);
+
+        return 255; // if item does not exist, do nothing
+    }
+    
     const char *name = ITEM_LOOKUP(item).name;
     uint8_t id = 255;
     

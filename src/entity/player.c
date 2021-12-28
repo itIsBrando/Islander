@@ -49,6 +49,10 @@ void plr_init()
     item_t pick = {.id = ITEM_STONE_PICK};
     itm_add_to_inventory(&player.inventory, &pick);
     goal_print_active();
+
+
+    itm_add_id_to_inventory(&player.inventory, ITEM_STONE, 20);
+    itm_add_id_to_inventory(&player.inventory, ITEM_WOOD, 20);
 }
 
 
@@ -78,7 +82,6 @@ void plr_update(const uint8_t j)
         else if (j & J_LEFT)
             hud_move_cur(DIRECTION_LEFT);
 
-        plr_draw_active_item();
         waitjoypad(J_LEFT | J_RIGHT);
         return;
     } else if(WY_REG < WINDOW_Y) {
@@ -206,11 +209,14 @@ void plr_add_id_to_inventory(const uint8_t id, const int8_t count)
 
 
 /**
- * @returns returns a pointer to the player active item
+ * @returns returns a pointer to the player active item, or NULL
  */
 inline item_t *plr_get_active_item()
 {
-    return &player.inventory.items[hud_cur];
+    if(hud_cur < player.inventory.size)
+        return &player.inventory.items[hud_cur];
+    else
+        return NULL;
 }
 
 
@@ -232,13 +238,17 @@ inline void plr_interact()
     item_t *item = plr_get_active_item();
     const tile_data_t *tile_data = tile_data_lookup(*t);
 
-    if(ITEM_LOOKUP(item).is_tool && tile_data->mineable) {
+    // if item is nonexistent, then return.
+    if(!item) {
+        return;
+    } else if(ITEM_LOOKUP(item).is_tool && tile_data->mineable) {
         shake(5);
         tile_damage += itm_get_tile_damage(item);
 
         // damages the tile that we are looking at
         if(tile_damage >= tile_data->hp) {
             x >>= 3, y >>= 3;
+            // @todo not all items' count should be `2 + (rand() & 0x1)`
             plr_add_id_to_inventory(tile_data->item_id, 2 + (rand() & 0x1));
             if(tile_data->onmine)
                 tile_data->onmine(x, y, *t);
@@ -248,7 +258,7 @@ inline void plr_interact()
             goal_check_completion();
         }
     } else if(itm_can_interact(item, *t)) {
-        cnk_active_write(x >> 3, y >> 3, TILE_BRIDGE);
+        cnk_active_write(x >> 3, y >> 3, ITEM_LOOKUP(item).id_tile);
         plr_sub_from_inventory(plr_get_active_item()->id, 1);
         plr_draw_active_item();
     }

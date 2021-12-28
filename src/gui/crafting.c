@@ -29,6 +29,7 @@ void cft_draw_requirements(const recipe_t *recipe)
         WY_TILE_OFFSET + 8,
         true
     );
+    print_window("need:", WX_TILE_OFFSET + 15 - 3, WY_TILE_OFFSET + 12);
 
     fill_win_rect(
         WX_TILE_OFFSET + 9,
@@ -105,6 +106,7 @@ void cft_open_menu(const bench_t bench)
     } while(!(j & J_B));
 
     spr_free(cur_id);
+    plr_draw_active_item();
 
     plr_show();
 

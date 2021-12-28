@@ -13,7 +13,17 @@ __VA_ARGS__\
 
 static void tree_onmine(uint8_t x, uint8_t y, tile_t tile)
 {
-        cnk_active_write(x, y + (tile == TILE_TREE_BOTTOM ? -1 : 1), TILE_GROUND);
+    cnk_active_write(x, y + (tile == TILE_TREE_BOTTOM ? -1 : 1), TILE_GROUND);
+}
+
+
+/**
+ * @param x relative active chunk x coordinate. [0-31]
+ * @param x relative active chunk y coordinate. [0-31]
+ * @param tile tile that is being mined
+ */
+static void workbench_onmine(uint8_t x, uint8_t y, tile_t tile) {
+    cnk_active_write(x, y, TILE_GROUND);
 }
 
 
@@ -23,6 +33,7 @@ const tile_data_t tile_data[] = {
     MAKE_TILE(TILE_TREE_BOTTOM, false, true, 10, .item_id=ITEM_WOOD, .onmine=tree_onmine),
     MAKE_TILE(TILE_STONE, false, true, 10, .item_id=ITEM_STONE),
     MAKE_TILE(TILE_COAL, false, true, 15, .item_id=ITEM_COAL),
+    MAKE_TILE(TILE_WORKBENCH, false, true, 9, .item_id=ITEM_WORKBENCH, .onmine=workbench_onmine),
 };
 
 

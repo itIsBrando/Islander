@@ -11,6 +11,7 @@ typedef enum {
     ITEM_IRON_ORE,
     ITEM_BRIDGE,
     ITEM_WORKBENCH,
+    ITEM_FLOWER
 };
 
 
