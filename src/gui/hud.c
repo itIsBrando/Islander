@@ -5,9 +5,11 @@
 #include "../print.h"
 #include "../oam.h"
 #include "../item/item.h"
+#include "../entity/player.h"
 
 
 uint8_t hud_cur = 0;
+int8_t hud_dx = 0;
 
 static uint8_t hud_cur_id;
 
@@ -69,10 +71,34 @@ void hud_move_cur(const direction_t dir)
         hud_cur++;
     }
     
-    scroll_sprite(hud_cur_id, dir_get_x(dir) << 4, 0);
+    hud_dx += dir_get_x(dir) << 4;
+
     plr_draw_active_item();
 }
 
+
+bool hud_can_move_cursor()
+{
+    return hud_dx == 0;
+}
+
+/**
+ * @brief Updates the HUD cursor
+ */
+inline void hud_update_cur()
+{
+    if(hud_dx == 0)
+        return;
+    
+    if(hud_dx > 0) {
+        hud_dx -= 2;
+        scroll_sprite(hud_cur_id, 2, 0);
+    } else {
+        hud_dx += 2;
+        scroll_sprite(hud_cur_id, -2, 0);
+
+    }
+}
 
 /**
  * @param index index of item removed.

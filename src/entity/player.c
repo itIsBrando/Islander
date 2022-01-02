@@ -41,7 +41,7 @@ void plr_init()
     set_sprite_tile(player.id, 2);
     set_sprite_prop(player.id, BIT(4));
 
-    player.x = 1, player.y = 1;
+    player.x = 15, player.y = 15;
     move_bkg(player.x, player.y);
 
     set_sprite_tile(cur_id = spr_allocate(), 16);
@@ -71,18 +71,22 @@ inline void plr_draw_active_item()
  */
 void plr_update(const uint8_t j)
 {
+    hud_update_cur();
+    
     // deals with inventory scrolling and drawing active goal
-    if(j & J_B) {
+    if((j & J_B)) {
         if(WY_REG > WINDOW_Y - 8) {
             hud_scroll_north();
         }
 
+        if(!hud_can_move_cursor())
+            return;
+            
         if(j & J_RIGHT)
             hud_move_cur(DIRECTION_RIGHT);
         else if (j & J_LEFT)
             hud_move_cur(DIRECTION_LEFT);
 
-        waitjoypad(J_LEFT | J_RIGHT);
         return;
     } else if(WY_REG < WINDOW_Y) {
         hud_scroll_south();
@@ -90,20 +94,20 @@ void plr_update(const uint8_t j)
 
 
     if(j & J_UP) {
-        if(((player.y - 1) & 63) == 0) {
-            if(cnk_load_row(DIRECTION_UP)) {
-                plr_move(DIRECTION_UP);
-                plr_move(DIRECTION_UP);
-            }
+        if(((player.y) & 63) == 0) {
+            cnk_load_row(DIRECTION_UP);
+            plr_move(DIRECTION_UP);
+            if(!plr_move(DIRECTION_UP))
+                player.y--;
         } else {
             plr_move(DIRECTION_UP);
         }
     } else if(j & J_DOWN) {
-        if(((player.y + 1) & 63) == 0) {
-            if(cnk_load_row(DIRECTION_DOWN)) {
-                plr_move(DIRECTION_DOWN);
-                plr_move(DIRECTION_DOWN);
-            }
+        if(((player.y) & 63) == 0) {
+            cnk_load_row(DIRECTION_DOWN);
+            plr_move(DIRECTION_DOWN);
+            if(!plr_move(DIRECTION_DOWN))
+                player.y++;
         } else {
             plr_move(DIRECTION_DOWN);
         }
@@ -111,29 +115,42 @@ void plr_update(const uint8_t j)
     }
 
     if(j & J_LEFT) {
-        if(((player.x - 1) & 63) == 0) {
-            if(cnk_load_row(DIRECTION_LEFT)) {
-                plr_move(DIRECTION_LEFT);
-                plr_move(DIRECTION_LEFT);
-            }
+        if(((player.x) & 63) == 0) {
+            cnk_load_row(DIRECTION_LEFT);
+            plr_move(DIRECTION_LEFT);
+            if(!plr_move(DIRECTION_LEFT))
+                player.x--;
         } else {
             plr_move(DIRECTION_LEFT);
         }
     }
     
     if(j & J_RIGHT) {
-        if(((player.x + 1) & 63) == 0) {
-            if(cnk_load_row(DIRECTION_RIGHT)) {
-                plr_move(DIRECTION_RIGHT);
-                plr_move(DIRECTION_RIGHT);
-            }
+        if(((player.x) & 63) == 0) {
+            cnk_load_row(DIRECTION_RIGHT);
+            plr_move(DIRECTION_RIGHT);
+            if(!plr_move(DIRECTION_RIGHT))
+                player.x++;
         } else {
             plr_move(DIRECTION_RIGHT);
         }
     }
 
-    if(j & J_START)
+    if((j & J_START) && WY_REG == WINDOW_Y)
         cft_open_menu(WORKBENCH);
+
+    if(j & J_SELECT) {
+        active_chunk_t *ac = cnk_get_active_chunks();
+        for(u8 y = 0; y < 4; y++)
+        {
+            for(u8 x = 0; x < 4; x++)
+            {
+                printInt(ac->xChunk, x << 3, y << 3, false);
+                printInt(ac->yChunk, x << 3, (y << 3) + 1, false);
+                ac++;
+            }
+        }
+    }
 
     if(j & J_A) {
         plr_interact();
@@ -269,8 +286,9 @@ inline void plr_interact()
 
 /**
  * Moves the player
+ * @returns false if the player could not move
  */
-void plr_move(const direction_t dir)
+bool plr_move(const direction_t dir)
 {
     const int8_t dx = dir_get_x(dir), dy = dir_get_y(dir);
 
@@ -296,14 +314,16 @@ void plr_move(const direction_t dir)
     {
         player.x -= dx;
         player.y -= dy;
-    } else {
-        scroll_bkg(dx, dy);
-
-        // @todo improve perfomance
-        if((anim_counter++ & 3) == 3) {
-            set_sprite_tile(player.id, TILE_PLAYER_BASE + ((anim_counter & 0b1100) % 3));
-        }
-
-        tile_damage = 0;
+        return false;
     }
+
+    scroll_bkg(dx, dy);
+
+    // @todo improve perfomance
+    if((anim_counter++ & 3) == 3) {
+        set_sprite_tile(player.id, TILE_PLAYER_BASE + ((anim_counter & 0b1100) % 3));
+    }
+
+    tile_damage = 0;
+    return true;
 }

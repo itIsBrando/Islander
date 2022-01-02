@@ -19,6 +19,9 @@ world_t world;
 
 active_chunk_t active_chunks[16];
 
+// this is the chunk that is used whenever there are no other 'real' chunks to show
+chunk_t empty_chunk;
+
 
 inline active_chunk_t *cnk_get_active_chunks()
 {
@@ -79,6 +82,20 @@ void cnk_active_write(u8 x, u8 y, u8 tile)
 
 
 /**
+ * Writes a tile on ANY chunk
+ * @param x tile x coordinate betwen 0 and 72
+ * @param y tile y coordinate betwen 0 and 72
+ * @note does not redraw a chunk if it is active
+ */
+void cnk_absolute_write(uint16_t x, uint16_t y, uint8_t tile)
+{
+    // this isn't right D: whoops
+    chunk_t *c = &world.chunks[(x >> 3) + y * 9];
+    
+}
+
+
+/**
  * Creates a chunk out of an island
  * @param islandNumber island data
  * @param xx [0-3) x coordinate for the placement of this island
@@ -116,7 +133,7 @@ void cnk_island_load(const uint8_t islandNumber, u8 xx, u8 yy)
 
 
 // min and max chunks that are loaded. Correspond to `xChunk`/`yChunk`
-static uint8_t cnk_xMin, cnk_xMax, cnk_yMin, cnk_yMax;
+static int8_t cnk_xMin, cnk_xMax, cnk_yMin, cnk_yMax;
 
 /**
  * Loads the first island onto the screen
@@ -124,6 +141,7 @@ static uint8_t cnk_xMin, cnk_xMax, cnk_yMin, cnk_yMax;
 void cnk_init()
 {
     memset(active_chunks, NULL, sizeof(active_chunks));
+    memset(&empty_chunk, 0, sizeof(empty_chunk));
     u8 offset = 0;
 
     for(u8 y = 0; y < 4; y++)
@@ -152,15 +170,15 @@ void cnk_init()
 
 /**
  * Loads a row of chunks north of current set up
- * @returns false if could not load (out of bounds)
  */
-bool cnk_load_row(const direction_t dir)
+void cnk_load_row(const direction_t dir)
 {
-    if((dir == DIRECTION_UP && cnk_yMin == 0) || (dir == DIRECTION_DOWN && cnk_yMax == 8))
-        return false;
+    bool useBlankChunks = false;
+    if((dir == DIRECTION_UP && cnk_yMin <= 0) || (dir == DIRECTION_DOWN && cnk_yMax >= 8))
+        useBlankChunks = true;
 
-    if((dir == DIRECTION_LEFT && cnk_xMin == 0) || (dir == DIRECTION_RIGHT && cnk_xMax == 8))
-        return false;
+    if((dir == DIRECTION_LEFT && cnk_xMin <= 0) || (dir == DIRECTION_RIGHT && cnk_xMax >= 8))
+        useBlankChunks = true;
 
     active_chunk_t *ac = active_chunks;
     const int8_t dx = dir_get_x(dir);
@@ -187,7 +205,10 @@ bool cnk_load_row(const direction_t dir)
             // cnk_unload(ac);
             // ac->xOffset = (ac->xChunk - 3) & 3;//(ac->xOffset + dx) & 3;
             // ac->yOffset = (ac->yChunk - 3) & 3;//(ac->yOffset + dy) & 3;
-            ac->chunk = &world.chunks[ac->xChunk + (ac->yChunk * 9)];
+            if(useBlankChunks)
+                ac->chunk = &empty_chunk;
+            else
+                ac->chunk = &world.chunks[ac->xChunk + (ac->yChunk * 9)];
             
             cnk_draw(
                 ac->xOffset,
@@ -205,8 +226,6 @@ bool cnk_load_row(const direction_t dir)
 
     cnk_xMax += dx;
     cnk_xMin += dx;
-    
-    return true;
 }
 
 

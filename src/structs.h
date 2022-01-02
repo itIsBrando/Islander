@@ -55,7 +55,7 @@ typedef struct {
 
 typedef struct {
     chunk_t *chunk;
-    u8 xChunk, yChunk; // [0-9) represents the chunk's position relative to the ENTIRE world
+    int8_t xChunk, yChunk; // [0-9) represents the chunk's position relative to the ENTIRE world
     u8 xOffset, yOffset;  // screen offset to draw chunks
 } active_chunk_t;
 
@@ -68,6 +68,7 @@ typedef struct {
 
 
 typedef struct {
+    // 24x24 island with 1-bit per tile
     uint8_t tiles[24 * 24 / 8];
 } stored_island_t;
 

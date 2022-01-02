@@ -10,7 +10,7 @@ void cnk_draw_active();
 
 active_chunk_t *cnk_get_active_chunks();
 
-bool cnk_load_row(const direction_t dir);
+void cnk_load_row(const direction_t dir);
 
 
 void cnk_active_write(u8 x, u8 y, u8 tile);

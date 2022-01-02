@@ -29,9 +29,10 @@
 
 
 ## Bug Fixes:
+- [ ] **Tiles are not persistant**
+- [ ] Obstacles can spawn on top of the player
 - [x] Random graphical glitches that seem to only occur after `shake()` is called frequently.
     - note that this does not seem to be a graphical issue, rather it is caused by the loading of the chunks itself
     - *FIXED!* Bug happened when player moved in an opposing direction when x=63 or y=63. Patch now prevents player from sitting at (or multiples of) those coordinates
-- [ ] Obstacles can spawn on top of the player
 - [x] ***PLAYER ITEM REMOVAL CAN CRASH GAME***
 - [x] Graphical bug occurs when item is removed from inventory and is not the last item in the hotbar

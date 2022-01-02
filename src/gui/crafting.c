@@ -22,14 +22,13 @@ void cft_draw_requirements(const recipe_t *recipe)
     print_window("CRAFT", WX_TILE_OFFSET + 10, WY_TILE_OFFSET + 10);
     
     // vvv prints out the current amount of item
-    print_window("HAVE:", WX_TILE_OFFSET + 8, WY_TILE_OFFSET + 8);
+    print_window("HAVE:  ", WX_TILE_OFFSET + 8, WY_TILE_OFFSET + 8);
     printInt(
         itm_get_count(itm_lookup(&player.inventory, recipe->product.id)),
         WX_TILE_OFFSET + 13,
         WY_TILE_OFFSET + 8,
         true
     );
-    print_window("need:", WX_TILE_OFFSET + 15 - 3, WY_TILE_OFFSET + 12);
 
     fill_win_rect(
         WX_TILE_OFFSET + 9,
@@ -54,6 +53,7 @@ void cft_open_menu(const bench_t bench)
 
     fill_win_rect(0, WY_TILE_OFFSET - 2, 20, 1, 224);
     print_window("CRAFTING", 10 - 4, WY_TILE_OFFSET - 1);
+    print_small_window("b close", 0, WY_TILE_OFFSET + 11);
 
     for(i = 0; i < CRAFTING_BENCH_SIZE; i++)
     {
